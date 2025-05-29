@@ -84,7 +84,6 @@ export default {
 </script>
 
 <style scoped>
-/* Styles sama seperti yang kamu kasih */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
 .navbar {

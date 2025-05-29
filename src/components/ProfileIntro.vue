@@ -605,8 +605,8 @@ button.contact-btn:hover {
 }
 
 .projects-section p {
-  margin-top: 0.1rem; /* atau margin-top: 0; */
-  margin-bottom: 1.5rem; /* atur sesuai kebutuhan */
+  margin-top: 0.1rem; 
+  margin-bottom: 1.5rem;
   line-height: 1.4;
   font-size: 1.15rem;
   color: #cce6ff;
@@ -658,7 +658,7 @@ button.contact-btn:hover {
 
 .project-image {
   width: 100%;
-  height: 140px;              /* kecilin tinggi gambar */
+  height: 140px;             
   border-radius: 15px;
   margin-bottom: 0.8rem;
   object-fit: cover;
@@ -669,7 +669,7 @@ button.contact-btn:hover {
   font-weight: 600;
   color: #66c2ff;
   margin-bottom: 0.8rem;
-  font-size: 0.9rem;          /* kecilin font */
+  font-size: 0.9rem;         
 }
 
 .tool-name {

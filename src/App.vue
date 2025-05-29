@@ -15,7 +15,7 @@ export default {
   },
   data() {
     return {
-      activeSection: "about", // default ke about saat awal load video selesai
+      activeSection: "about",
     };
   },
 };
