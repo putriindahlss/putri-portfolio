@@ -1,6 +1,6 @@
 <template>
-  <Navbar />
-  <ProfileIntro />
+  <Navbar :activeSection="activeSection" @update:activeSection="val => activeSection = val" />
+  <ProfileIntro @updateActiveSection="val => activeSection = val" />
 </template>
 
 <script>
@@ -12,6 +12,11 @@ export default {
   components: {
     Navbar,
     ProfileIntro,
+  },
+  data() {
+    return {
+      activeSection: "about", // default ke about saat awal load video selesai
+    };
   },
 };
 </script>

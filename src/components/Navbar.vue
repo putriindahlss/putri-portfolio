@@ -1,6 +1,11 @@
 <template>
   <nav class="navbar" :class="{ scrolled: isScrolled }">
-    <div class="logo-container" @mouseenter="logoHovered = true" @mouseleave="logoHovered = false">
+    <div
+      class="logo-container"
+      @mouseenter="logoHovered = true"
+      @mouseleave="logoHovered = false"
+      role="banner"
+    >
       <img src="/logo.png" alt="Logo" class="logo" :class="{ hovered: logoHovered }" />
       <span class="name">Putri Indah</span>
     </div>
@@ -9,7 +14,7 @@
         <a
           href="#about"
           :class="{ active: activeSection === 'about' }"
-          @click.prevent="scrollToSection('about')"
+          @click.prevent="handleClick('about')"
           >About Me</a
         >
       </li>
@@ -17,25 +22,25 @@
         <a
           href="#skills"
           :class="{ active: activeSection === 'skills' }"
-          @click.prevent="scrollToSection('skills')"
+          @click.prevent="handleClick('skills')"
           >Skills</a
         >
       </li>
       <li>
-        <router-link
-          to="/projects"
-          :class="{ active: activeSection === 'projects' || currentRoute === '/projects' }"
+        <a
+          href="#projects"
+          :class="{ active: activeSection === 'projects' }"
+          @click.prevent="handleClick('projects')"
+          >Projects</a
         >
-          Projects
-        </router-link>
       </li>
       <li>
-        <router-link
-          to="/contact"
-          :class="{ active: activeSection === 'contact' || currentRoute === '/contact' }"
+        <a
+          href="#contact"
+          :class="{ active: activeSection === 'contact' }"
+          @click.prevent="handleClick('contact')"
+          >Contact</a
         >
-          Contact
-        </router-link>
       </li>
     </ul>
   </nav>
@@ -44,69 +49,46 @@
 <script>
 export default {
   name: "Navbar",
+  props: {
+    activeSection: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
-      activeSection: null,
-      scrollListener: null,
       isScrolled: false,
       logoHovered: false,
     };
   },
-  computed: {
-    currentRoute() {
-      return this.$route.path;
-    },
-  },
   methods: {
-    scrollToSection(id) {
+    handleClick(id) {
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
+      this.$emit("update:activeSection", id);
     },
     onScroll() {
       this.isScrolled = window.scrollY > 10;
-
-      if (this.currentRoute !== "/") {
-        this.activeSection = null;
-        return;
-      }
-    
-      const about = document.getElementById("about");
-      const skills = document.getElementById("skills");
-      const projects = document.getElementById("projects");
-      const contact = document.getElementById("contact");
-      const scrollPos = window.scrollY + 150; // offset tweak supaya lebih pas
-    
-      if (contact && scrollPos >= contact.offsetTop) {
-        this.activeSection = "contact";
-      } else if (projects && scrollPos >= projects.offsetTop) {
-        this.activeSection = "projects";
-      } else if (skills && scrollPos >= skills.offsetTop) {
-        this.activeSection = "skills";
-      } else if (about && scrollPos >= about.offsetTop) {
-        this.activeSection = "about";
-      } else {
-        this.activeSection = null;
-      }
     },
   },
   mounted() {
-    this.scrollListener = () => this.onScroll();
-    window.addEventListener("scroll", this.scrollListener);
+    window.addEventListener("scroll", this.onScroll);
     this.onScroll();
   },
   beforeUnmount() {
-    window.removeEventListener("scroll", this.scrollListener);
+    window.removeEventListener("scroll", this.onScroll);
   },
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+/* Styles sama seperti yang kamu kasih */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
 .navbar {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   position: fixed;
   top: 0;
   left: 0;
@@ -123,9 +105,7 @@ export default {
   -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-radius: 0 0 15px 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  transition:
-    background 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
   user-select: none;
 }
 
@@ -172,22 +152,17 @@ export default {
   padding: 0;
 }
 
-.navbar a,
-.navbar router-link {
+.navbar a {
   color: white;
   text-decoration: none;
   font-weight: 400;
   font-size: 1.15rem;
   cursor: pointer;
-  transition:
-    color 0.3s ease,
-    font-weight 0.3s ease,
-    text-shadow 0.3s ease;
+  transition: color 0.3s ease, font-weight 0.3s ease, text-shadow 0.3s ease;
   position: relative;
 }
 
-.navbar a.active,
-.navbar router-link.active {
+.navbar a.active {
   font-weight: 700;
   color: #66c2ff;
   text-shadow:
@@ -196,9 +171,8 @@ export default {
     0 0 30px rgba(102, 194, 255, 0.3);
 }
 
-.navbar a.active::after,
-.navbar router-link.active::after {
-  content: '';
+.navbar a.active::after {
+  content: "";
   position: absolute;
   bottom: -6px;
   left: 0;
@@ -208,12 +182,9 @@ export default {
   border-radius: 4px;
 }
 
-.navbar a:hover,
-.navbar router-link:hover {
+.navbar a:hover {
   color: #66c2ff;
-  text-shadow:
-    0 0 8px #66c2ff,
-    0 0 14px #66c2ff;
+  text-shadow: 0 0 8px #66c2ff, 0 0 14px #66c2ff;
 }
 
 /* Responsive untuk layar kecil */
@@ -228,8 +199,7 @@ export default {
     gap: 1rem;
     width: 100%;
   }
-  .navbar a,
-  .navbar router-link {
+  .navbar a {
     font-size: 1.25rem;
   }
 }

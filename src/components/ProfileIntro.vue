@@ -78,19 +78,31 @@
     <!-- Projects -->
     <section id="projects" class="projects-section" v-if="showAbout">
       <h2>Projects</h2>
-      <p>Explore my projects and achievements</p>
+      <p>Projects + little achievements I’m excited to share!</p>
       <div class="projects-container">
         <div class="project-card">
-          <h3>Project 1</h3>
-          <p>A brief description about project 1 goes here.</p>
+         <h3>UI Mobile</h3>
+         <img src="/ui-mobile.jpg" alt="UI Mobile Project Screenshot" class="project-image" />
+         <div class="tools-used">Tools: <span class="tool-name">Figma</span></div>
+         <p class="project-description">
+           Designed the UI/UX for a mobile application aimed at improving accessibility to university academic services. Successfully delivered the project with an excellent grade (A).
+         </p>
         </div>
         <div class="project-card">
-          <h3>Project 2</h3>
-          <p>A brief description about project 2 goes here.</p>
+          <h3>Network Analysis and System Implementation</h3>
+          <img src="/jarkomdat.jpg" alt="Network Analysis Project Screenshot" class="project-image" />
+          <div class="tools-used">Tools: <span class="tool-name">Cisco</span></div>
+          <p class="project-description">
+            Analyzed the network infrastructure and identified issues at SMA Islam Al Azhar 1. Conducted needs assessment, network mapping, and implemented solutions to improve connectivity and performance.
+          </p>
         </div>
         <div class="project-card">
-          <h3>Project 3</h3>
-          <p>A brief description about project 3 goes here.</p>
+          <h3>Top 5 Students of Cybersecurity Bootcamp, Dibimbing.id</h3>
+          <img src="/bootcamp.jpg" alt="Bootcamp Screenshot" class="project-image" />
+          <div class="tools-used">Bootcamp: Red Team & Blue Team training</div>
+          <p class="project-description">
+            Currently enrolled in a cybersecurity bootcamp combining theory and hands-on Red Team (penetration testing) and Blue Team (defense) activities.
+          </p>
         </div>
       </div>
     </section>
@@ -144,6 +156,12 @@
           GitHub
         </button>
       </div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <div>Copyright © 2025 Putri Indah. All Rights Reserved.</div>
     </section>
   </div>
 </template>
@@ -178,10 +196,31 @@ export default {
       this.showAbout = true;
       this.$nextTick(() => {
         const aboutSection = document.getElementById("about");
-        if (aboutSection) aboutSection.scrollIntoView({ behavior: "smooth" });
+        if (aboutSection) {
+          aboutSection.scrollIntoView({ behavior: "smooth" });
+          this.$emit("updateActiveSection", "about");
+        }
         this.startNameTypingLoop();
         this.startTypingParagraph();
       });
+    },
+    onScroll() {
+      const about = document.getElementById("about");
+      const skills = document.getElementById("skills");
+      const projects = document.getElementById("projects");
+      const contact = document.getElementById("contact");
+
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      if (contact && scrollPos >= contact.offsetTop) {
+        this.$emit("updateActiveSection", "contact");
+      } else if (projects && scrollPos >= projects.offsetTop) {
+        this.$emit("updateActiveSection", "projects");
+      } else if (skills && scrollPos >= skills.offsetTop) {
+        this.$emit("updateActiveSection", "skills");
+      } else if (about && scrollPos >= about.offsetTop) {
+        this.$emit("updateActiveSection", "about");
+      }
     },
     startNameTypingLoop() {
       this.displayedName = "";
@@ -250,8 +289,11 @@ export default {
       window.open("https://github.com/putriindahlss", "_blank");
     },
   },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
   beforeUnmount() {
-    if (this.typingIntervalId) clearInterval(this.typingIntervalId);
+    window.removeEventListener("scroll", this.onScroll);
   },
 };
 </script>
@@ -562,6 +604,14 @@ button.contact-btn:hover {
     0 0 16px rgba(102, 194, 255, 0.6);
 }
 
+.projects-section p {
+  margin-top: 0.1rem; /* atau margin-top: 0; */
+  margin-bottom: 1.5rem; /* atur sesuai kebutuhan */
+  line-height: 1.4;
+  font-size: 1.15rem;
+  color: #cce6ff;
+}
+
 .projects-container {
   display: flex;
   justify-content: center;
@@ -577,7 +627,7 @@ button.contact-btn:hover {
   background: transparent;
   border: 2px solid #66c2ff;
   border-radius: 20px;
-  padding: 2rem 2.5rem;
+  padding: 0.5rem 1rem;
   flex: 1 1 320px;
   box-shadow:
     0 0 15px #66c2ff80,
@@ -585,6 +635,8 @@ button.contact-btn:hover {
   transition: box-shadow 0.3s ease;
   user-select: none;
   box-sizing: border-box;
+  min-width: 260px;          
+  max-width: 900px; 
 }
 
 .project-card:hover {
@@ -602,6 +654,37 @@ button.contact-btn:hover {
 .project-card p {
   font-size: 1.1rem;
   color: #cce6ff;
+}
+
+.project-image {
+  width: 100%;
+  height: 140px;              /* kecilin tinggi gambar */
+  border-radius: 15px;
+  margin-bottom: 0.8rem;
+  object-fit: cover;
+  box-shadow: 0 0 10px #66c2ff88;
+}
+
+.tools-used {
+  font-weight: 600;
+  color: #66c2ff;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;          /* kecilin font */
+}
+
+.tool-name {
+  font-style: italic;
+  color: #aaccee;
+}
+
+.projects-section .project-card .project-description {
+  font-size: 0.85rem;
+  color: #cce6ff;
+  line-height: 1.3;
+  margin-top: 0;
+  max-height: 90px;
+  overflow: auto;
+  text-align: justify;
 }
 
 /* Contact */
