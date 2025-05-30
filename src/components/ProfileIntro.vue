@@ -79,7 +79,7 @@
     <!-- Projects -->
     <section id="projects" class="projects-section" v-if="showAbout">
       <h2>Projects</h2>
-      <p>Projects + little achievements I’m excited to share!</p>
+      <p>+ little achievements that I’m excited to share!</p>
       <div class="projects-container">
         <div class="project-card">
           <h3>UI Mobile</h3>
@@ -88,6 +88,7 @@
           <p class="project-description">
             Designed the UI/UX for a mobile application aimed at improving accessibility to university academic services. Successfully delivered the project with an excellent grade (A).
           </p>
+          <button class="demo-btn" @click="openFigmaDemo('https://www.figma.com/proto/uMowGDKkhJx5IqQTdoAjqa/Sister-in-sister?node-id=654-3489&p=f&t=eUW6QnYonnkUlzQD-1&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=654%3A3489')">Demo</button>
         </div>
         <div class="project-card">
           <h3>Network Analysis and System Implementation</h3>
@@ -318,6 +319,9 @@ export default {
     },
     goToGitHub() {
       window.open("https://github.com/putriindahlss", "_blank");
+    },
+    openFigmaDemo(url) {
+      window.open(url, '_blank');
     },
   },
   mounted() {
@@ -708,6 +712,24 @@ button.contact-btn:hover {
   max-height: 90px;
   overflow: auto;
   text-align: justify;
+}
+
+.demo-btn {
+  margin-top: 0.5px;
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #66c2ff;
+  background-color: transparent;
+  border: 2px solid #66c2ff;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.demo-btn:hover {
+  background-color: #66c2ff;
+  color: #222;
 }
 
 /* Contact */
