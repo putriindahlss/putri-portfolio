@@ -1,6 +1,9 @@
 <template>
-  <Navbar :activeSection="activeSection" @update:activeSection="val => activeSection = val" />
-  <ProfileIntro @updateActiveSection="val => activeSection = val" />
+  <Navbar :activeSection="activeSection" :videoPlaying="videoPlaying" />
+  <ProfileIntro
+    @updateActiveSection="updateActiveSection"
+    @updateVideoPlaying="updateVideoPlaying"
+  />
 </template>
 
 <script>
@@ -8,15 +11,20 @@ import Navbar from "./components/Navbar.vue";
 import ProfileIntro from "./components/ProfileIntro.vue";
 
 export default {
-  name: "App",
-  components: {
-    Navbar,
-    ProfileIntro,
-  },
+  components: { Navbar, ProfileIntro },
   data() {
     return {
-      activeSection: "about",
+      activeSection: null,
+      videoPlaying: true,
     };
+  },
+  methods: {
+    updateActiveSection(section) {
+      this.activeSection = section;
+    },
+    updateVideoPlaying(isPlaying) {
+      this.videoPlaying = isPlaying;
+    },
   },
 };
 </script>

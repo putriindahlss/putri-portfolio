@@ -1,47 +1,20 @@
 <template>
-  <nav class="navbar" :class="{ scrolled: isScrolled }">
+  <nav class="navbar" :class="{ scrolled: isScrolled }" role="banner">
     <div
       class="logo-container"
       @mouseenter="logoHovered = true"
       @mouseleave="logoHovered = false"
-      role="banner"
+      tabindex="0"
+      aria-label="Putri Indah Logo and Name"
     >
       <img src="/logo.png" alt="Logo" class="logo" :class="{ hovered: logoHovered }" />
       <span class="name">Putri Indah</span>
     </div>
-    <ul>
-      <li>
-        <a
-          href="#about"
-          :class="{ active: activeSection === 'about' }"
-          @click.prevent="handleClick('about')"
-          >About Me</a
-        >
-      </li>
-      <li>
-        <a
-          href="#skills"
-          :class="{ active: activeSection === 'skills' }"
-          @click.prevent="handleClick('skills')"
-          >Skills</a
-        >
-      </li>
-      <li>
-        <a
-          href="#projects"
-          :class="{ active: activeSection === 'projects' }"
-          @click.prevent="handleClick('projects')"
-          >Projects</a
-        >
-      </li>
-      <li>
-        <a
-          href="#contact"
-          :class="{ active: activeSection === 'contact' }"
-          @click.prevent="handleClick('contact')"
-          >Contact</a
-        >
-      </li>
+    <ul v-if="!isMobile">
+      <li><a href="#about" :class="{ active: activeSection === 'about' }" @click.prevent="scrollToSection('about')">About Me</a></li>
+      <li><a href="#skills" :class="{ active: activeSection === 'skills' }" @click.prevent="scrollToSection('skills')">Skills</a></li>
+      <li><a href="#projects" :class="{ active: activeSection === 'projects' }" @click.prevent="scrollToSection('projects')">Projects</a></li>
+      <li><a href="#contact" :class="{ active: activeSection === 'contact' }" @click.prevent="scrollToSection('contact')">Contact</a></li>
     </ul>
   </nav>
 </template>
@@ -49,35 +22,58 @@
 <script>
 export default {
   name: "Navbar",
-  props: {
-    activeSection: {
-      type: String,
-      default: null,
-    },
-  },
   data() {
     return {
+      activeSection: null,
       isScrolled: false,
       logoHovered: false,
+      isMobile: false,
     };
   },
   methods: {
-    handleClick(id) {
+    scrollToSection(id) {
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
-      this.$emit("update:activeSection", id);
+    },
+    handleResize() {
+      this.isMobile = window.innerWidth <= 700;
     },
     onScroll() {
       this.isScrolled = window.scrollY > 10;
+      if (this.isMobile) {
+        this.activeSection = null; // no highlight on mobile
+        return;
+      }
+      // logic to set activeSection on desktop
+      const about = document.getElementById("about");
+      const skills = document.getElementById("skills");
+      const projects = document.getElementById("projects");
+      const contact = document.getElementById("contact");
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      if (about && scrollPos >= about.offsetTop && scrollPos < (skills ? skills.offsetTop : Infinity)) {
+        this.activeSection = "about";
+      } else if (skills && scrollPos >= skills.offsetTop && scrollPos < (projects ? projects.offsetTop : Infinity)) {
+        this.activeSection = "skills";
+      } else if (projects && scrollPos >= projects.offsetTop && scrollPos < (contact ? contact.offsetTop : Infinity)) {
+        this.activeSection = "projects";
+      } else if (contact && scrollPos >= contact.offsetTop) {
+        this.activeSection = "contact";
+      } else {
+        this.activeSection = null;
+      }
     },
   },
   mounted() {
+    this.handleResize();
+    window.addEventListener("resize", this.handleResize);
     window.addEventListener("scroll", this.onScroll);
     this.onScroll();
   },
   beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
     window.removeEventListener("scroll", this.onScroll);
   },
 };
@@ -98,7 +94,6 @@ export default {
   justify-content: space-between;
   padding: 1rem 2rem;
   box-sizing: border-box;
-
   background: rgba(34, 34, 34, 0.4);
   backdrop-filter: saturate(180%) blur(12px);
   -webkit-backdrop-filter: saturate(180%) blur(12px);
@@ -143,6 +138,7 @@ export default {
     0 0 8px rgba(102, 194, 255, 0.6);
 }
 
+/* Desktop menu */
 .navbar ul {
   list-style: none;
   display: flex;
@@ -186,20 +182,10 @@ export default {
   text-shadow: 0 0 8px #66c2ff, 0 0 14px #66c2ff;
 }
 
-/* Responsive untuk layar kecil */
-@media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
+/* Hide desktop menu on mobile */
+@media (max-width: 700px) {
   .navbar ul {
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-  }
-  .navbar a {
-    font-size: 1.25rem;
+    display: none;
   }
 }
 </style>

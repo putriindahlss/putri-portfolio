@@ -6,6 +6,7 @@
         ref="videoPlayer"
         autoplay
         muted
+        playsinline
         @ended="handleVideoEnded"
         class="background-video"
       >
@@ -81,12 +82,12 @@
       <p>Projects + little achievements I’m excited to share!</p>
       <div class="projects-container">
         <div class="project-card">
-         <h3>UI Mobile</h3>
-         <img src="/ui-mobile.jpg" alt="UI Mobile Project Screenshot" class="project-image" />
-         <div class="tools-used">Tools: <span class="tool-name">Figma</span></div>
-         <p class="project-description">
-           Designed the UI/UX for a mobile application aimed at improving accessibility to university academic services. Successfully delivered the project with an excellent grade (A).
-         </p>
+          <h3>UI Mobile</h3>
+          <img src="/ui-mobile.jpg" alt="UI Mobile Project Screenshot" class="project-image" />
+          <div class="tools-used">Tools: <span class="tool-name">Figma</span></div>
+          <p class="project-description">
+            Designed the UI/UX for a mobile application aimed at improving accessibility to university academic services. Successfully delivered the project with an excellent grade (A).
+          </p>
         </div>
         <div class="project-card">
           <h3>Network Analysis and System Implementation</h3>
@@ -156,13 +157,19 @@
           GitHub
         </button>
       </div>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br /><br /><br /><br /><br />
       <div>Copyright © 2025 Putri Indah. All Rights Reserved.</div>
     </section>
+
+    <!-- Scroll Down Button -->
+    <button
+      v-if="showAbout"
+      class="scroll-down-btn"
+      @click="scrollToNextSection"
+      aria-label="Scroll to next section"
+    >
+      ↓
+    </button>
   </div>
 </template>
 
@@ -188,23 +195,29 @@ export default {
       isDeletingName: false,
       nameCharIndex: 0,
       nameTypingSpeed: 100,
+      activeSection: null,
+      videoPlaying: true,
     };
   },
   methods: {
     handleVideoEnded() {
       this.showVideo = false;
       this.showAbout = true;
+      this.videoPlaying = false;
+      this.activeSection = "about"; // highlight about setelah video
       this.$nextTick(() => {
         const aboutSection = document.getElementById("about");
         if (aboutSection) {
           aboutSection.scrollIntoView({ behavior: "smooth" });
-          this.$emit("updateActiveSection", "about");
         }
         this.startNameTypingLoop();
         this.startTypingParagraph();
+        this.$emit("updateActiveSection", this.activeSection);
+        this.$emit("updateVideoPlaying", this.videoPlaying);
       });
     },
     onScroll() {
+      if (this.videoPlaying) return; // skip highlight saat video jalan
       const about = document.getElementById("about");
       const skills = document.getElementById("skills");
       const projects = document.getElementById("projects");
@@ -213,13 +226,19 @@ export default {
       const scrollPos = window.scrollY + window.innerHeight / 3;
 
       if (contact && scrollPos >= contact.offsetTop) {
-        this.$emit("updateActiveSection", "contact");
+        this.setActive("contact");
       } else if (projects && scrollPos >= projects.offsetTop) {
-        this.$emit("updateActiveSection", "projects");
+        this.setActive("projects");
       } else if (skills && scrollPos >= skills.offsetTop) {
-        this.$emit("updateActiveSection", "skills");
+        this.setActive("skills");
       } else if (about && scrollPos >= about.offsetTop) {
-        this.$emit("updateActiveSection", "about");
+        this.setActive("about");
+      }
+    },
+    setActive(section) {
+      if (this.activeSection !== section) {
+        this.activeSection = section;
+        this.$emit("updateActiveSection", section);
       }
     },
     startNameTypingLoop() {
@@ -276,6 +295,18 @@ export default {
         }
       }, 35);
     },
+    scrollToNextSection() {
+      const sectionsOrder = ["about", "skills", "projects", "contact"];
+      let currentIndex = this.activeSection
+        ? sectionsOrder.indexOf(this.activeSection)
+        : 0;
+      let nextIndex = (currentIndex + 1) % sectionsOrder.length;
+      const nextSectionId = sectionsOrder[nextIndex];
+      const el = document.getElementById(nextSectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    },
     handleCvClick() {
       window.open("/cv-putri.pdf", "_blank");
     },
@@ -291,6 +322,8 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.onScroll);
+    this.activeSection = null;
+    this.videoPlaying = true;
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.onScroll);
@@ -299,7 +332,7 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 
 :global(html, body) {
   margin: 0;
@@ -308,7 +341,7 @@ export default {
   overflow-x: hidden;
   box-sizing: border-box;
   background-color: #222;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 *,
@@ -317,6 +350,7 @@ export default {
   box-sizing: inherit;
 }
 
+/* Video fullscreen */
 .hero {
   position: fixed;
   top: 0;
@@ -338,6 +372,7 @@ export default {
   filter: brightness(0.6);
 }
 
+/* About Me */
 .about-section {
   display: flex;
   flex-wrap: wrap;
@@ -371,8 +406,7 @@ export default {
   border-radius: 25px;
   object-fit: cover;
   border: 5px solid rgba(102, 194, 255, 0.5);
-  box-shadow:
-    0 0 10px rgba(102, 194, 255, 0.6),
+  box-shadow: 0 0 10px rgba(102, 194, 255, 0.6),
     0 0 30px rgba(102, 194, 255, 0.4),
     0 0 40px rgba(102, 194, 255, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -382,8 +416,7 @@ export default {
 
 .profile-pic:hover {
   transform: scale(1.07);
-  box-shadow:
-    0 0 15px rgba(102, 194, 255, 0.8),
+  box-shadow: 0 0 15px rgba(102, 194, 255, 0.8),
     0 0 40px rgba(102, 194, 255, 0.6),
     0 0 50px rgba(102, 194, 255, 0.5);
 }
@@ -393,7 +426,7 @@ export default {
   max-width: 650px;
   text-align: left;
   color: #eee;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   position: relative;
 }
 
@@ -402,8 +435,7 @@ export default {
   margin-bottom: 1rem;
   font-weight: 700;
   color: #fff;
-  text-shadow:
-    0 0 6px rgba(102, 194, 255, 0.9),
+  text-shadow: 0 0 6px rgba(102, 194, 255, 0.9),
     0 0 12px rgba(102, 194, 255, 0.7);
 }
 
@@ -453,7 +485,9 @@ button.contact-btn {
   border: 3px solid #66c2ff;
   border-radius: 35px;
   cursor: pointer;
-  transition: background-color 0.35s ease, color 0.35s ease, box-shadow 0.3s ease;
+  transition: background-color 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.3s ease;
   user-select: none;
   box-shadow: 0 0 15px rgba(102, 194, 255, 0.4);
   display: flex;
@@ -464,8 +498,7 @@ button.contact-btn {
 button.contact-btn:hover {
   background-color: #66c2ff;
   color: #222;
-  box-shadow:
-    0 0 30px rgba(102, 194, 255, 0.8),
+  box-shadow: 0 0 30px rgba(102, 194, 255, 0.8),
     0 0 40px rgba(102, 194, 255, 0.7);
 }
 
@@ -476,7 +509,7 @@ button.contact-btn:hover {
   color: #66c2ff;
   width: 100%;
   max-width: 100vw;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   text-align: center;
   box-sizing: border-box;
 }
@@ -486,8 +519,7 @@ button.contact-btn:hover {
   margin-bottom: 3rem;
   font-weight: 700;
   color: #66c2ff;
-  text-shadow:
-    0 0 8px rgba(102, 194, 255, 0.8),
+  text-shadow: 0 0 8px rgba(102, 194, 255, 0.8),
     0 0 16px rgba(102, 194, 255, 0.6);
 }
 
@@ -508,9 +540,7 @@ button.contact-btn:hover {
   border-radius: 20px;
   padding: 2rem 2.5rem;
   flex: 1 1 320px;
-  box-shadow:
-    0 0 15px #66c2ff80,
-    0 0 30px #66c2ff40;
+  box-shadow: 0 0 15px #66c2ff80, 0 0 30px #66c2ff40;
   transition: box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -520,9 +550,7 @@ button.contact-btn:hover {
 }
 
 .skill-card:hover {
-  box-shadow:
-    0 0 30px #66c2ffcc,
-    0 0 60px #66c2ff99;
+  box-shadow: 0 0 30px #66c2ffcc, 0 0 60px #66c2ff99;
 }
 
 .skill-card h3 {
@@ -589,7 +617,7 @@ button.contact-btn:hover {
   color: #66c2ff;
   width: 100%;
   max-width: 100vw;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   text-align: center;
   box-sizing: border-box;
 }
@@ -599,13 +627,12 @@ button.contact-btn:hover {
   margin-bottom: 3rem;
   font-weight: 700;
   color: #66c2ff;
-  text-shadow:
-    0 0 8px rgba(102, 194, 255, 0.8),
+  text-shadow: 0 0 8px rgba(102, 194, 255, 0.8),
     0 0 16px rgba(102, 194, 255, 0.6);
 }
 
 .projects-section p {
-  margin-top: 0.1rem; 
+  margin-top: 0.1rem;
   margin-bottom: 1.5rem;
   line-height: 1.4;
   font-size: 1.15rem;
@@ -629,20 +656,16 @@ button.contact-btn:hover {
   border-radius: 20px;
   padding: 0.5rem 1rem;
   flex: 1 1 320px;
-  box-shadow:
-    0 0 15px #66c2ff80,
-    0 0 30px #66c2ff40;
+  box-shadow: 0 0 15px #66c2ff80, 0 0 30px #66c2ff40;
   transition: box-shadow 0.3s ease;
   user-select: none;
   box-sizing: border-box;
-  min-width: 260px;          
-  max-width: 900px; 
+  min-width: 260px;
+  max-width: 900px;
 }
 
 .project-card:hover {
-  box-shadow:
-    0 0 30px #66c2ffcc,
-    0 0 60px #66c2ff99;
+  box-shadow: 0 0 30px #66c2ffcc, 0 0 60px #66c2ff99;
 }
 
 .project-card h3 {
@@ -658,7 +681,7 @@ button.contact-btn:hover {
 
 .project-image {
   width: 100%;
-  height: 140px;             
+  height: 140px;
   border-radius: 15px;
   margin-bottom: 0.8rem;
   object-fit: cover;
@@ -669,7 +692,7 @@ button.contact-btn:hover {
   font-weight: 600;
   color: #66c2ff;
   margin-bottom: 0.8rem;
-  font-size: 0.9rem;         
+  font-size: 0.9rem;
 }
 
 .tool-name {
@@ -694,7 +717,7 @@ button.contact-btn:hover {
   color: #66c2ff;
   width: 100%;
   max-width: 100vw;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   text-align: center;
   box-sizing: border-box;
 }
@@ -704,8 +727,7 @@ button.contact-btn:hover {
   margin-bottom: 2rem;
   font-weight: 700;
   color: #66c2ff;
-  text-shadow:
-    0 0 8px rgba(102, 194, 255, 0.8),
+  text-shadow: 0 0 8px rgba(102, 194, 255, 0.8),
     0 0 16px rgba(102, 194, 255, 0.6);
 }
 
@@ -730,7 +752,9 @@ button.contact-btn:hover {
   border: 3px solid #66c2ff;
   border-radius: 35px;
   cursor: pointer;
-  transition: background-color 0.35s ease, color 0.35s ease, box-shadow 0.3s ease;
+  transition: background-color 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.3s ease;
   user-select: none;
   box-shadow: 0 0 15px rgba(102, 194, 255, 0.4);
 }
@@ -738,8 +762,7 @@ button.contact-btn:hover {
 .contact-btn:hover {
   background-color: #66c2ff;
   color: #222;
-  box-shadow:
-    0 0 30px rgba(102, 194, 255, 0.8),
+  box-shadow: 0 0 30px rgba(102, 194, 255, 0.8),
     0 0 40px rgba(102, 194, 255, 0.7);
 }
 
@@ -748,6 +771,29 @@ button.contact-btn:hover {
   height: 22px;
   fill: currentColor;
   user-select: none;
+}
+
+/* Scroll Down Button */
+.scroll-down-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: transparent;
+  border: none;
+  color: #66c2ff;
+  font-size: 3rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  z-index: 9999;
+  transition: color 0.3s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.scroll-down-btn:hover {
+  color: #4499ff;
+  transform: translateY(4px);
 }
 
 /* Responsive */
@@ -784,6 +830,10 @@ button.contact-btn:hover {
   button.contact-btn {
     width: 100%;
     padding: 1.25rem 0;
+  }
+  .background-video {
+    height: 40vh; /* buat video di mobile ga terlalu tinggi */
+    object-fit: contain;
   }
 }
 </style>
