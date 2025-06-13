@@ -99,11 +99,11 @@
           </p>
         </div>
         <div class="project-card">
-          <h3>Top 5 Students of Cybersecurity Bootcamp, Dibimbing.id</h3>
-          <img src="/bootcamp.jpg" alt="Bootcamp Screenshot" class="project-image" />
-          <div class="tools-used">Bootcamp: Red Team & Blue Team training</div>
+          <h3>Project Manager & Full-Stack Developer: Conference Information System Project</h3>
+          <img src="/iapa.jpg" alt="IAPA Screenshot" class="project-image" />
+          <div class="tools-used">Tools: Springboot, Vue.js</div>
           <p class="project-description">
-            Currently enrolled in a cybersecurity bootcamp combining theory and hands-on Red Team (penetration testing) and Blue Team (defense) activities.
+            As the Project Manager and Full-Stack Developer, I led the creation of the Conference Information System (SISKO). I was responsible for managing the team and project timeline, while also working as a hands-on Full-Stack Developer, actively contributing to the application's code and features.
           </p>
         </div>
       </div>
