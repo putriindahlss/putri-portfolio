@@ -88,6 +88,7 @@
           <p class="project-description">
             Conducted a comprehensive penetration test on the Dibimbing Shop e-commerce platform. This was a final project for the Dibimbing.id cybersecurity bootcamp, focusing on offensive security. The assessment involved identifying, exploiting, and documenting security vulnerabilities to improve the web application's overall security posture.
           </p>
+          <button class="demo-btn" onclick="window.open('https://drive.google.com/file/d/1nJDH_ksMRUy-RM29Mt7Nukd3vmMQnPdl/view?usp=sharing', '_blank')">Report</button>
         </div>
         <div class="project-card">
           <h3>UI Mobile</h3>
