@@ -82,6 +82,14 @@
       <p>+ little achievements that I’m excited to share!</p>
       <div class="projects-container">
         <div class="project-card">
+          <h3>Web Application Penetration Test: Dibimbing Shop</h3>
+          <img src="/pentest.jpg" alt="Dibimbing Shop Penetration Test" class="project-image" />
+          <div class="tools-used">Tools: <span class="tool-name">Burp Suite, OWASP ZAP, Nmap</span></div>
+          <p class="project-description">
+            Conducted a comprehensive penetration test on the Dibimbing Shop e-commerce platform. This was a final project for the Dibimbing.id cybersecurity bootcamp, focusing on offensive security. The assessment involved identifying, exploiting, and documenting security vulnerabilities to improve the web application's overall security posture.
+          </p>
+        </div>
+        <div class="project-card">
           <h3>UI Mobile</h3>
           <img src="/ui-mobile.jpg" alt="UI Mobile Project Screenshot" class="project-image" />
           <div class="tools-used">Tools: <span class="tool-name">Figma</span></div>
@@ -89,6 +97,14 @@
             Designed the UI/UX for a mobile application aimed at improving accessibility to university academic services. Successfully delivered the project with an excellent grade (A).
           </p>
           <button class="demo-btn" @click="openFigmaDemo('https://www.figma.com/proto/uMowGDKkhJx5IqQTdoAjqa/Sister-in-sister?node-id=654-3489&p=f&t=eUW6QnYonnkUlzQD-1&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=654%3A3489')">Demo</button>
+        </div>
+        <div class="project-card">
+          <h3>Network Analysis and System Implementation</h3>
+          <img src="/jarkomdat.jpg" alt="Network Analysis Project Screenshot" class="project-image" />
+          <div class="tools-used">Tools: <span class="tool-name">Cisco</span></div>
+          <p class="project-description">
+            Analyzed the network infrastructure and identified issues at SMA Islam Al Azhar 1. Conducted needs assessment, network mapping, and implemented solutions to improve connectivity and performance.
+          </p>
         </div>
         <div class="project-card">
           <h3>Network Analysis and System Implementation</h3>
