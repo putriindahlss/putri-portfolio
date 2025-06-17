@@ -108,14 +108,6 @@
           </p>
         </div>
         <div class="project-card">
-          <h3>Network Analysis and System Implementation</h3>
-          <img src="/jarkomdat.jpg" alt="Network Analysis Project Screenshot" class="project-image" />
-          <div class="tools-used">Tools: <span class="tool-name">Cisco</span></div>
-          <p class="project-description">
-            Analyzed the network infrastructure and identified issues at SMA Islam Al Azhar 1. Conducted needs assessment, network mapping, and implemented solutions to improve connectivity and performance.
-          </p>
-        </div>
-        <div class="project-card">
           <h3>Project Manager & Full-Stack Developer: Conference Information System Project</h3>
           <img src="/iapa.jpg" alt="IAPA Screenshot" class="project-image" />
           <div class="tools-used">Tools: Springboot, Vue.js</div>
